@@ -1,7 +1,19 @@
-FROM java:8
+FROM maven:3.5.4-jdk-8-alpine as maven
 
-EXPOSE 8080
+COPY ./pom.xml ./pom.xml
 
-ADD target/test-setup.jar test-setup.jar
+COPY ./src ./src
 
-ENTRYPOINT ["java", "-jar", "test-setup.jar"]
+RUN mvn dependency:go-offline -B
+
+RUN mvn package
+
+FROM openjdk:8u171-jre-alpine
+
+RUN mkdir /javawork
+
+WORKDIR /javawork
+
+COPY --from=maven target/test-setup.jar ./test-setup.jar
+
+CMD ["java", "-jar", "./test-setup.jar"]
