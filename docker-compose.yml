@@ -1,36 +1,39 @@
-version: '3'
+version: '3.7'
 
-services:
+services: 
+  backendservice:
+    build: ./test-setup/
+    ports: 
+      - "8080:8080"
+    networks: 
+      - backend
+      - frontend
+    depends_on: 
+      - db
+    restart: always
+  
   db:
-    image: 'mysql/mysql-server:5.7'
+    image: 'mysql:5.7.35'
     ports:
-           - "3306:3306"
+      - "3306:3306"
     environment:
-           - MYSQL_ROOT_PASSWORD=root
-           - MYSQL_USER=root
-           - MYSQL_PASSWORD=root
-           - MYSQL_ROOT_HOST=%
-    volumes:
-           - ./my-datavolume:/var/lib/mysql
-    healthcheck:
-           test: ["CMD","mysqladmin","ping","-h","localhost"]
-           timeout: 20s
-           retries: 10
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: employee_db
     restart: always
-  backendserver:
-    build: ./backend/
-    ports:
-           - "9092"
-    links:
-           - "db"
-    depends_on:
-           - "db"
+    networks: 
+      - backend
+    
+  frontendservice:
+    build: ./next-demo1/
+    ports: 
+      - "8081:80"
     restart: always
-  frontend:
-    build: ./frontend/
-    links:
-           - "backendserver"
     depends_on:
-           - "backendserver"
-    ports:
-           - "80:80"    
+      - "backendservice"
+    networks:
+      - frontend
+
+networks:
+  backend:
+  frontend: 
