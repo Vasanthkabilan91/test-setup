@@ -1,0 +1,39 @@
+version: '3.7'
+
+services: 
+  backendservice:
+    build: ./test-setup/
+    ports: 
+      - "8080:8080"
+    networks: 
+      - backend
+      - frontend
+    depends_on: 
+      - db
+    restart: always
+  
+  db:
+    image: 'mysql:5.7.35'
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: employee_db
+    restart: always
+    networks: 
+      - backend
+    
+  frontendservice:
+    build: ./next-demo1/
+    ports: 
+      - "8081:80"
+    restart: always
+    depends_on:
+      - "backendservice"
+    networks:
+      - frontend
+
+networks:
+  backend:
+  frontend: 
