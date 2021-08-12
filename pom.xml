@@ -32,10 +32,7 @@
 			<groupId>mysql</groupId>
 			<artifactId>mysql-connector-java</artifactId>
 			<scope>runtime</scope>
-<<<<<<< HEAD
-=======
 			<version>5.7.35</version>
->>>>>>> 11ecc1f163bbfef480fe7fc24add86a842e8d80a
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
