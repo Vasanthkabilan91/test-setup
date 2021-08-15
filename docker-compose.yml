@@ -2,7 +2,7 @@ version: '3.7'
 
 services: 
   backendservice:
-    build: ./backend/
+    image: vasanthkabilan91/backend
     ports: 
       - "8080:8080"
     networks: 
@@ -25,7 +25,7 @@ services:
       - backend
     
   frontendservice:
-    build: ./frontend/
+    image: vasanthkabilan91/frontend
     ports: 
       - "8081:80"
     restart: always
